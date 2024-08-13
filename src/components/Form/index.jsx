@@ -44,8 +44,12 @@ export default function Form() {
       password: "",
     });
   };
+  function upperFirstLetter(string) {
+    if (!string) return 'Usuario'; 
+    return  string.charAt(0).toUpperCase() + string.slice(1);
+  }
   return (
-    <div className="flex flex-col items-center justify-center  sm:max-md:gap-6 md:max-lg:gap-8 gap-12 max-md:w-full w-2/5 h-screen">
+    <div className="flex flex-col items-center justify-center  sm:max-md:gap-6 md:max-lg:gap-8 gap-12 max-lg:w-full max-w-96 w-2/5 h-screen">
       <div className="flex flex-col gap-1  w-2/3  items-start  justify-center   ">
         <span className="text-3xl font-bold select-none ">
           {" "}
@@ -104,8 +108,8 @@ export default function Form() {
         isOpen={modal} 
         type={error}
         onclickConfirm={() => (setModal(false))}
-        infoTexte={(error ? "Credenciais Invalidas" : `${user.name}`)} 
-        AltText={(error ? "Suas credenciais são inválidas. Por favor, insira credenciais válidas." : "Login efetuado com sucesso")}
+        infoTexte={(error ? "Credenciais Invalidas" : `Login efetuado com sucesso`)} 
+        AltText={(error ? "Suas credenciais são inválidas. Por favor, insira credenciais válidas." : <>Bem-vindo de volta, <span className="font-semibold">{upperFirstLetter(user.name)}</span>! Você pode acessar todos os nossos recursos.</>)}
         Icon={(error ? <I.XCircle color="rgb(220 38 38)" size={60}/> : <I.Check color="rgb(101 163 13)" size={60}/>)} 
       />
     </div>
