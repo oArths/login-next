@@ -11,7 +11,7 @@ export default function Home() {
   });
 
   return (
-    <main className="flex min-h-screen flex-row items-center justify-between ">
+    <main className="flex min-h-screen flex-row items-center  justify-around max-lg:justify-center ">
       <Form />
       <Suspense>
         <Homeimage />
