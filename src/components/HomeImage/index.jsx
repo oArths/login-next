@@ -1,7 +1,7 @@
 import Image from "next/image";
 export default function HomeImage() {
   return (
-    <div className=" h-screen w-3/4 py-5  max-md:hidden ">
+    <div className="max-lg:hidden  h-screen w-3/4 py-5  ">
       <Image
         className="w-full h-full object-contain shrink  "
         src="/images/gradient.svg"
