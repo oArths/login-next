@@ -1,6 +1,14 @@
 import { useState } from "react";
+import api from "../../services/index.jsx";
+import Modal from "@/components/Modal/index.jsx";
+import * as I from "lucide-react";
 
-export default function Form({ onLogin, Loading }) {
+export default function Form() {
+
+  const [error, setError] = useState(false);
+  const [user, setUser] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [modal, setModal] = useState(false);
   const [values, setValues] = useState({
     email: "",
     password: "",
@@ -12,10 +20,26 @@ export default function Form({ onLogin, Loading }) {
       [name]: value,
     }));
   };
-  const Send = () => {
-    onLogin(values);
 
-    setValues({
+  const Login = async (values) => {
+    setLoading(true)
+    console.log(values);
+
+    try {
+      const res = await api.post("/login", values);
+      setUser(res.data);
+      setError(false);
+    } catch (error) {
+      setError(true);
+      
+    }finally{
+      setModal(true)
+      setLoading(false)
+    }
+  };
+  const Send = () => {
+    Login(values);
+       setValues({
       email: "",
       password: "",
     });
@@ -34,7 +58,7 @@ export default function Form({ onLogin, Loading }) {
       </div>
 
       <div className="flex flex-col w-full gap-3 items-center justify-center">
-        <form className="flex flex-col gap-12 items-center  w-full">
+        <form  className="flex flex-col gap-12 items-center  w-full">
           <input
             id="email"
             name="email"
@@ -64,18 +88,26 @@ export default function Form({ onLogin, Loading }) {
       <div className=" flex flex-col items-center justify-center w-full  mt-10 gap-5 ">
         <button
           onClick={Send}
-          disabled={Loading}
+          disabled={loading}
           className={`w-2/3 h-11 text-white rounded-lg p-2 ${
-            Loading ? "bg-neutral-900 cursor-wait" : "  bg-black "
+            loading ? "bg-neutral-900 cursor-wait" : "  bg-black "
           }`}
         >
-          {Loading ? "Carregando" : "Entrar"}
+          {loading ? "Carregando" : "Entrar"}
         </button>
         <div className="text-xs  select-none ">
           Ainda não é membro?
           <span className="text-blue-700 cursor-pointer"> Cadastre-se.</span>
         </div>
       </div>
+      <Modal 
+        isOpen={modal} 
+        type={error}
+        onclickConfirm={() => (setModal(false))}
+        infoTexte={(error ? "Credenciais Invalidas" : `${user.name}`)} 
+        AltText={(error ? "Suas credenciais são inválidas. Por favor, insira credenciais válidas." : "Login efetuado com sucesso")}
+        Icon={(error ? <I.XCircle color="rgb(220 38 38)" size={60}/> : <I.Check color="rgb(101 163 13)" size={60}/>)} 
+      />
     </div>
   );
 }
